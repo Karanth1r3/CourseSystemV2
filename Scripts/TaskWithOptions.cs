@@ -176,7 +176,7 @@ namespace course
             }
         }
 
-        // Handle Input and iterate options
+        // Handle which option is choosed based on button pressed (may be remade to be more universal)
         public void HandleInput()
         {
             if (!Interactable || !Triggered) return;

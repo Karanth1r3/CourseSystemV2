@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace course
 {
+    // to do - check system structure and way this one is going to interact 
+    // with tasks before touching this
     public class TaskSystem : MonoBehaviour
     {
         [SerializeField] TaskWithOptions[] currentTasks;
