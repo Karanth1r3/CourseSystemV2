@@ -8,6 +8,12 @@ using UnityEngine.Events;
 namespace course
 {
 
+//to do 
+//* revert to single script with choosing
+// interaction through enum, probably there won't be need for
+// many additional inherited task types
+
+//* perhaps add state behaviour to prevent input or smth like this
     public class TaskWithOptions : AbstractTask, I_InteractableInput, ITriggerZone
     {
         // if it is necessary for player to stay inside trigger area - input will be blocked when outside or smth like dat
