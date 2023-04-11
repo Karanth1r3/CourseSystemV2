@@ -49,12 +49,14 @@ namespace course
             Proceed();
         }
         public void Fail()
-        {
+        {//to do - add common behaviour
             onFailed?.Invoke();
         }
 
         public void Proceed()
         {
+
+            //to do - add common behaviour
             onProceeded?.Invoke();
         }
 
@@ -68,7 +70,7 @@ namespace course
         {
             Interactable = false;
         }
-
+        // return string for ui tips
         public string FormAvailableOptionsDescriptions()
         {
             string temp = string.Empty;
