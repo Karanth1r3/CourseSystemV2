@@ -1,7 +1,6 @@
 
 
 using HandStates;
-using Obi;
 using UnityEngine;
 
 namespace HandStates
