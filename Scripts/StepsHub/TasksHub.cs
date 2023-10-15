@@ -24,14 +24,14 @@ public class TasksHub : MonoBehaviour
     // when deactivated - with second one
     public void SubscribeTask(Task task)
     {
-        task._stepActivated.AddListener(delegate { AddActiveTask(task); });
-        task._stepDeactivated.AddListener(delegate { RemoveActiveTask(task); });
+        task._OnStepActivated.AddListener(delegate { AddActiveTask(task); });
+        task._OnStepDeactivated.AddListener(delegate { RemoveActiveTask(task); });
     }
 
     public void UnsubscribeTask(Task task)
     {
-        task._stepActivated.RemoveListener(delegate { AddActiveTask(task); });
-        task._stepDeactivated.RemoveListener(delegate { RemoveActiveTask(task); });
+        task._OnStepActivated.RemoveListener(delegate { AddActiveTask(task); });
+        task._OnStepDeactivated.RemoveListener(delegate { RemoveActiveTask(task); });
     }
 
     // if task becomes active in course/quest it will be processed here

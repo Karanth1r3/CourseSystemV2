@@ -17,7 +17,7 @@ public class Task : MonoBehaviour, ITask
     [SerializeField] TaskAction[] linkedActions;
 
     [Header("Events")]
-    public UnityEvent _stepActivated, _stepDeactivated, _stepCompleted, _stepFailed, _stepEnded;
+    public UnityEvent _OnStepActivated, _OnStepDeactivated, _OnStepCompleted, _OnStepFailed, _OnStepEnded;
     // Start is called before the first frame update
 
 
@@ -44,7 +44,7 @@ public class Task : MonoBehaviour, ITask
     {
         UnlinkActions();
         isActivated = false;
-        _stepDeactivated.Invoke();
+        _OnStepDeactivated.Invoke();
     }
 
     public void ActivateStep()
@@ -52,7 +52,7 @@ public class Task : MonoBehaviour, ITask
         isDone = false;
         isActivated = true;
         LinkActions();
-        _stepActivated.Invoke();
+        _OnStepActivated.Invoke();
     }
     
     void ActivateNextStep(Task next)
@@ -63,14 +63,14 @@ public class Task : MonoBehaviour, ITask
     public void EndStep()
     {
         isDone = true;
-        _stepEnded.Invoke();
+        _OnStepEnded.Invoke();
     }
 
     public void CompleteStep()
     {
         DeactivateStep();
         EndStep();
-        _stepCompleted.Invoke();
+        _OnStepCompleted.Invoke();
         if(successfulNext != null) ActivateNextStep(successfulNext);
     }
 
@@ -78,7 +78,7 @@ public class Task : MonoBehaviour, ITask
     {
         DeactivateStep();
         EndStep();
-        _stepFailed.Invoke();
+        _OnStepFailed.Invoke();
         if(failedNext != null) ActivateNextStep(failedNext);
     }
 

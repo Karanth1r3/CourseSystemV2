@@ -44,13 +44,13 @@ namespace course
 
         void SubscribeLastTask()
         {
-            lastStep._stepEnded.AddListener(CompleteCourse);
+            lastStep._OnStepEnded.AddListener(CompleteCourse);
         }
 
         // if this function is not executed on course end, may lead to undesired effects (or not)
         void UnsubscribeLastTask()
         {
-            lastStep._stepEnded.RemoveListener(CompleteCourse);
+            lastStep._OnStepEnded.RemoveListener(CompleteCourse);
         }
 
         // info is sent to hub for easier access to information about tasks/course => gathered in one place
@@ -89,7 +89,7 @@ namespace course
         {
             foreach (Task step in courseSteps)
             {
-                step._stepEnded.AddListener(HandleStepChange);
+                step._OnStepEnded.AddListener(HandleStepChange);
             }
         }
 
@@ -146,7 +146,7 @@ namespace course
             foreach (Task step in courseSteps)
             {
                 step.DeactivateStep();
-                step._stepEnded.RemoveListener(HandleStepChange);
+                step._OnStepEnded.RemoveListener(HandleStepChange);
             }
         }
 
