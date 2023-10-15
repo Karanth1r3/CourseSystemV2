@@ -5,32 +5,37 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+// class created for easier access to tasks and their included information
 public class TasksHub : MonoBehaviour
 {
     public List<Task> tasks = new List<Task>();
     public List<Task> activeTasks = new List<Task>();
     public UnityEvent<Task> activeTaskAdded, activeTaskRemoved;
     public UnityEvent activaTaskListChanged;
-    // Start is called before the first frame update
+
+    // probably will be needed, not clear for now
+    public Course CurrentCourse => currentCourse;
+    private Course currentCourse;
 
     public class SimpleTaskEvent : UnityEvent<Task> { }
 
-    private void Awake()
+    // when course/quest becomes active, it's tasks are processed with this function,
+    // when deactivated - with second one
+    public void SubscribeTask(Task task)
     {
-        tasks = FindObjectsOfType<Task>().ToList();
-        SubscribeTasks();
+        task._stepActivated.AddListener(delegate { AddActiveTask(task); });
+        task._stepDeactivated.AddListener(delegate { RemoveActiveTask(task); });
     }
 
-    void SubscribeTasks()
+    public void UnsubscribeTask(Task task)
     {
-        foreach (Task task in tasks)
-        {
-            task._stepActivated.AddListener(delegate { AddActiveTask(task); });
-            task._stepDeactivated.AddListener(delegate { RemoveActiveTask(task); });
-        }
-
+        task._stepActivated.RemoveListener(delegate { AddActiveTask(task); });
+        task._stepDeactivated.RemoveListener(delegate { RemoveActiveTask(task); });
     }
 
+    // if task becomes active in course/quest it will be processed here
+    // if deactivated - second one is called
     void AddActiveTask(Task task)
     {
         if (activeTasks.Contains(task)) return;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// todo - divide views & data
 public class UI_ProgressTracker : MonoBehaviour
 {
     [SerializeField] private TasksHub hub;

@@ -4,19 +4,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
+
+//for testing
 public class InputTaskAction : TaskAction, I_InteractableInput, ITriggerZone
 {
+    [SerializeField] InputActionReference keyBinding;
     [SerializeField] float delay = 0f;
     public KeyCode actionKey;
-    [SerializeField] private bool isCorrect; // should this action proceed linked steps or fail them
+    [SerializeField] private bool isCorrect; 
     [SerializeField] private bool requiresTrigger; // this value should be set in inspector if action is performed only in limited area
     [SerializeField] private bool triggered;
-    //[Serializable] public struct Option { public KeyCode key; public bool isValid; public string description; };
-    //public Option[] options;
 
     public event ITriggerZone.ITriggerZone onEnter;
     public event ITriggerZone.ITriggerZone onExit;
+
+    void LinkBindings()
+    {
+        keyBinding.action.performed += e => HandleAction();
+    }
+
+    private void RemoveBindings()
+    {
+        keyBinding.action.performed -= e => HandleAction();
+    }
+
+    private void Start()
+    {
+        LinkBindings();
+    }
+
+    private void OnDestroy()
+    {
+        RemoveBindings();
+    }
 
     public string GetActionsDescriptions()
     {
@@ -27,26 +49,25 @@ public class InputTaskAction : TaskAction, I_InteractableInput, ITriggerZone
     public void HandleInput()
     {
         //if(!isInteractable) return;
-        if(linkedTasks.Count == 0) return;
-        if(!triggered && requiresTrigger) { return; }
+        if (linkedTasks.Count == 0) return;
+        if (!triggered && requiresTrigger) { return; }
 
-        if(Input.GetKeyDown(actionKey))
+        if (Input.GetKeyDown(actionKey))
         {
-            Debug.LogError("Test");
             Invoke("HandleAction", delay);
         }
     }
 
-    void HandleAction()
+    private void HandleAction()
     {
         if (isCorrect) { Complete(); }
         else { Fail(); }
     }
 
-    private void Update()
-    {
-        HandleInput();
-    }
+    //private void Update()
+    //{
+    //    HandleInput();
+    //}
 
     public void HandleEnter()
     {

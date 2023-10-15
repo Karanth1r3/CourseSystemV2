@@ -47,6 +47,13 @@ public class TaskAction : MonoBehaviour, ITaskAction
         if (linkedTasks.Count == 0) isInteractable = false;
     }
 
+    public void Execute(bool isValid)
+    {
+        if(isValid) 
+            { Complete(); }
+        else 
+            { Fail(); }
+    }
     // Update is called once per frame
    public void LinkTask(Task task)
     {

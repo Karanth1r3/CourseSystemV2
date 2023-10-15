@@ -1,0 +1,74 @@
+{
+    "name": "SystemV2Controls",
+    "maps": [
+        {
+            "name": "CourseActions",
+            "id": "709f7b83-6b24-4731-b079-fd379b9db353",
+            "actions": [
+                {
+                    "name": "Mouse_L",
+                    "type": "Button",
+                    "id": "51e2669e-65b4-484b-94b1-ff716f64f417",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Mouse_R",
+                    "type": "Button",
+                    "id": "2f7e31cb-83e9-427a-8bba-b1fd19d47a6d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Mouse_R1",
+                    "type": "Button",
+                    "id": "68858210-eb40-43bf-9864-223f6ff0e18d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "582a8035-3f17-4814-aea5-c030dc351493",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse_L",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f3a813f-7282-4107-b5d3-9019f004c51a",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse_R",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e229235-f2dc-4fbf-b032-8901050653bb",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse_R1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

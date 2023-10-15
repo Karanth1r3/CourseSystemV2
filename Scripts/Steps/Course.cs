@@ -1,9 +1,12 @@
 using course;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
+// main function of this class is managing tasks changes and progression through course,
+// but some additional info is processed via Hub
 public class Course : MonoBehaviour
 {
     [SerializeField] private TasksHub stepHub; //
@@ -16,25 +19,17 @@ public class Course : MonoBehaviour
 
     public UnityEvent _courseStarted, _courseEnded, _courseSucceed, _courseFailed, _courseBroke, _stepChanged;
     // Start is called before the first frame update
+
+    //todo - probably will be needed to handle this outside of onenable/ondisable scenarios
     private void OnEnable()
     {
         ActivateCourse();
     }
 
-    void LinkWithStepHub()
-    {
-        if(stepHub == null) stepHub = transform.parent.GetComponent<TasksHub>();
-
-        if (stepHub == null) { Debug.LogError("No Step Hub found in scene"); return; }
-
-        stepHub.activeTaskAdded.AddListener(AddStepToActiveList);
-        stepHub.activeTaskRemoved.AddListener(RemoveStepFromActiveList);
-    }
-
-
     void ActivateCourse()
     {
         LinkWithStepHub();
+        LinkTasksWithHub();
         InitializeCourse();
         LinkStepsWithCourse();
         SubscribeLastTask();
@@ -46,7 +41,6 @@ public class Course : MonoBehaviour
         {
             task.ActivateStep();
         }
-
     }
 
     void SubscribeLastTask()
@@ -54,11 +48,44 @@ public class Course : MonoBehaviour
         lastStep._stepEnded.AddListener(CompleteCourse);
     }
 
+    // if this function is not executed on course end, may lead to undesired effects (or not)
     void UnsubscribeLastTask()
     {
         lastStep._stepEnded.RemoveListener(CompleteCourse);
     }
 
+    // info is sent to hub for easier access to information about tasks/course => gathered in one place
+    void LinkWithStepHub()
+    {
+        if(stepHub == null) stepHub = transform.parent.GetComponent<TasksHub>();
+
+        if (stepHub == null) { Debug.LogError("No Step Hub found in scene"); return; }
+
+        stepHub.activeTaskAdded.AddListener(AddStepToActiveList);
+        stepHub.activeTaskRemoved.AddListener(RemoveStepFromActiveList);
+    }
+
+    // for managing active/inactive tasks with the Hub
+    private void LinkTasksWithHub()
+    {
+        foreach(Task task in courseSteps)
+        {
+            stepHub.SubscribeTask(task);
+        }
+    }
+
+    private void UnlinkTasksFromHub()
+    {
+        foreach (Task task in courseSteps)
+        {
+            stepHub.UnsubscribeTask(task);
+        }
+    }
+    //.............................................
+    public void HandleStepChange()
+    {
+        _stepChanged.Invoke();
+    }
     void LinkStepsWithCourse()
     {
         foreach (Task step in courseSteps)
@@ -66,37 +93,21 @@ public class Course : MonoBehaviour
             step._stepEnded.AddListener(HandleStepChange);
         }
     }
-    void ResetSteps()
+
+    // for debugging purposes i guess
+    public void AddStepToActiveList(Task step)
     {
-        foreach (Task step in courseSteps)
-        {
-            step.DeactivateStep();
-            step._stepEnded.RemoveListener(HandleStepChange);
-        }
+        if (currentActiveSteps.Contains(step)) return;
+        currentActiveSteps.Add(step);
     }
 
-    void DeactivateCourse()
+    public void RemoveStepFromActiveList(Task step)
     {
-        ResetSteps();
+        currentActiveSteps.Remove(step);
     }
+    //..................................................................................................................
 
-    private void OnDisable()
-    {
-        DeactivateCourse();
-    }
-
-    public void EndCourse()
-    {
-        _courseEnded.Invoke();
-        gameObject.SetActive(false);
-        foreach(Task step in currentActiveSteps)
-        {
-            step.DeactivateStep();
-        }
-        currentActiveSteps.Clear();
-        UnsubscribeLastTask();
-    }
-
+    // these handle different scenarios of ending the course
     public void CompleteCourse()
     {
         _courseSucceed.Invoke();
@@ -114,22 +125,35 @@ public class Course : MonoBehaviour
         _courseBroke.Invoke();
         EndCourse();
     }
-
-    public void AddStepToActiveList(Task step)
+    public void EndCourse()
     {
-        if (currentActiveSteps.Contains(step)) return;
-        currentActiveSteps.Add(step);
+        _courseEnded.Invoke();
+        gameObject.SetActive(false);
+        foreach (Task step in currentActiveSteps)
+        {
+            step.DeactivateStep();
+        }
+        currentActiveSteps.Clear();
+        UnsubscribeLastTask();
+    }
+    void DeactivateCourse()
+    {
+        ResetSteps();
+        UnlinkTasksFromHub();
     }
 
-    public void RemoveStepFromActiveList(Task step)
+    void ResetSteps()
     {
-        currentActiveSteps.Remove(step);
+        foreach (Task step in courseSteps)
+        {
+            step.DeactivateStep();
+            step._stepEnded.RemoveListener(HandleStepChange);
+        }
     }
 
-
-    public void HandleStepChange()
+    private void OnDisable()
     {
-        _stepChanged.Invoke();
+        DeactivateCourse();
     }
-
+    //................
 }
