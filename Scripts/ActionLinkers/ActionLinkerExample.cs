@@ -13,11 +13,15 @@ namespace course
         [SerializeField] private TaskAction taskAction;
         [SerializeField] private UnityEvent onConditionsMet, onConditionsFailed;
 
+        public event IActionLinker.IActionLinker OnValidActionPerformed;
+        public event IActionLinker.IActionLinker OnWrongActionPerformed;
 
         public void LinkAction()
         {
             onConditionsMet.AddListener(ProcessValidSignal);
             onConditionsFailed.AddListener(ProcessInvalidSignal);
+            OnValidActionPerformed += onConditionsMet.Invoke;
+            OnWrongActionPerformed += onConditionsFailed.Invoke;
         }
 
         private void Start()
@@ -31,12 +35,14 @@ namespace course
 
         public void PressCorrectButton()
         {
-            onConditionsMet?.Invoke();
+            //onConditionsMet?.Invoke();
+            OnValidActionPerformed?.Invoke();
         }
 
         public void PressWrongButton()
         {
-            onConditionsFailed?.Invoke();
+            //onConditionsFailed?.Invoke();
+            OnWrongActionPerformed?.Invoke();
         }
 
         public void ProcessInvalidSignal()

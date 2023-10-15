@@ -14,13 +14,13 @@ public class SceneTransformsResetter : MonoBehaviour
     
     public void Initialize()
     {
-        foreach(TransformResetter g in transformResettables)
+        foreach(TransformResetter resetter in transformResettables)
         {
-            if(!g.NoPos) positionMap.Add(g, g.transform.position);
+            if(!resetter.NoPos) positionMap.Add(resetter, resetter.transform.position);
 
-            if (!g.NoRot) rotationMap.Add(g, g.transform.rotation);
+            if (!resetter.NoRot) rotationMap.Add(resetter, resetter.transform.rotation);
 
-            if (!g.NoScal) scaleMap.Add(g, g.transform.localScale);
+            if (!resetter.NoScal) scaleMap.Add(resetter, resetter.transform.localScale);
         }
     }
 

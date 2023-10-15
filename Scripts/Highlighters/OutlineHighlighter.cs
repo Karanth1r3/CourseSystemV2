@@ -9,4 +9,9 @@ public class OutlineHighlighter : IHighlightStrategy
         throw new System.NotImplementedException();
     }
 
+    public void RemoveHighlight(GameObject[] objects)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

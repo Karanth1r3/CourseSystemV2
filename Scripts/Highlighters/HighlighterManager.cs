@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Schema;
 using UnityEngine;
 
 // todo - custom inspector for instant strategy change on enum dropdown selection change
@@ -60,5 +57,10 @@ public class HighlighterManager : MonoBehaviour
     public static void Highlight(GameObject[] toHighlight)
     {
         currentHighlightingMethod.HighlightObjects(toHighlight);
+    }
+
+    public static void RemoveHighlight(GameObject[] toHighlight)
+    {
+        currentHighlightingMethod.RemoveHighlight(toHighlight);
     }
 }
