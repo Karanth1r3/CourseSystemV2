@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Highlighter : MonoBehaviour
 {
+    private bool canHighlight;
     public enum HighlightingCondition
     {
         OnActivation,
@@ -30,7 +31,7 @@ public class Highlighter : MonoBehaviour
         } 
         else
         {
-            if (trigger == null) return;           
+            if (trigger == null) { canHighlight = true; return; }       
             trigger.onEnter += Highlight;
             trigger.onExit -= Highlight;
         }

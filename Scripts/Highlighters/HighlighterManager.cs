@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Schema;
 using UnityEngine;
 
+// todo - custom inspector for instant strategy change on enum dropdown selection change
 public class HighlighterManager : MonoBehaviour
 {
     [SerializeField] private IHighlightStrategy[] highlighters;
@@ -11,6 +12,16 @@ public class HighlighterManager : MonoBehaviour
         outline
     }
     public HighlightingOptions highlightingOptions;
+    // useless
+    public HighlightingOptions options
+    {
+        get { return highlightingOptions; }
+        set
+        {
+            highlightingOptions = value;
+            SwitchStrategy();
+        }
+    }
 
     private static IHighlightStrategy currentHighlightingMethod;
 
@@ -23,11 +34,12 @@ public class HighlighterManager : MonoBehaviour
                 return (T)strategy1;
             }
         }
-        return default(T);
+        return default;
     }
-    private void Start()
+
+    void SwitchStrategy()
     {
-        switch(highlightingOptions)
+        switch (highlightingOptions)
         {
             case HighlightingOptions.outline:
                 {
@@ -35,6 +47,10 @@ public class HighlighterManager : MonoBehaviour
                     break;
                 }
         }
+    }
+    private void Start()
+    {
+       SwitchStrategy();
     }
     public void SetHighlightingMethod(IHighlightStrategy strategy)
     {
