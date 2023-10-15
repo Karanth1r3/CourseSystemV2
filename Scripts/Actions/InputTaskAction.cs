@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
-//created for testing purposes
+//created for testing purposes, probably won't be used in some serious aspect
 public class InputTaskAction : TaskAction, I_InteractableInput, ITriggerZone
 {
     [SerializeField] InputActionReference keyBinding;

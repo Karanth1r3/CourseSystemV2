@@ -1,80 +1,82 @@
 using course;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TaskAction : MonoBehaviour, ITaskAction
+namespace course
 {
-    [SerializeField] protected List<Task> linkedTasks = new List<Task>();
-    [SerializeField] protected bool isInteractable = false;
-    [SerializeField] protected string actionDescription; // for UI
-
-    [SerializeField] private UnityEvent _OnSuccess, _OnFail, _OnDone;
-
-    // task is a more abstract/wider thing than action. task may contain multiple actions
-    // Action may refer to different tasks as well.
-    // Action subscribes to tasks when the corresponding course is activated
-    public void LinkTask(Task task)
+    public class TaskAction : MonoBehaviour, ITaskAction
     {
-        if (linkedTasks.Contains(task)) return;
-        linkedTasks.Add(task);
-        if (linkedTasks.Count > 0) isInteractable = true;
-    }
-    public void RemoveTask(Task task)
-    {
-        linkedTasks.Remove(task);
-        if (linkedTasks.Count == 0) isInteractable = false;
-    }
+        [SerializeField] protected List<Task> linkedTasks = new List<Task>();
+        [SerializeField] protected bool isInteractable = false;
+        [SerializeField] protected string actionDescription; // for UI
 
-    public void Complete()
-    {
-        if (linkedTasks.Count == 0) { return; }
-        if(!isInteractable) { return; }
-        for(int i = 0; i < linkedTasks.Count; i++) // DANGEROUS ------------------------------------ better to think up something better, possibly breaks when 2 tasks are linked
+        [SerializeField] private UnityEvent _OnSuccess, _OnFail, _OnDone;
+
+        // task is a more abstract/wider thing than action. task may contain multiple actions
+        // Action may refer to different tasks as well.
+        // Action subscribes to tasks when the corresponding course is activated
+        public void LinkTask(Task task)
         {
-            linkedTasks[i].CompleteStep();
+            if (linkedTasks.Contains(task)) return;
+            linkedTasks.Add(task);
+            if (linkedTasks.Count > 0) isInteractable = true;
         }
-        //foreach (SimpleTask task in linkedTasks)
-        //{
-        //    task.Proceed();
-        //}
-        _OnSuccess?.Invoke();
-        _OnDone?.Invoke();
-    }
-
-    public void Fail()
-    {
-        if(linkedTasks.Count == 0) { return; }
-        if (!isInteractable) { return; }
-        for (int i = 0; i < linkedTasks.Count; i++) // DANGEROUS ------------------------------------ better to think up something better
+        public void RemoveTask(Task task)
         {
-            linkedTasks[i].FailStep();
+            linkedTasks.Remove(task);
+            if (linkedTasks.Count == 0) isInteractable = false;
         }
-        _OnFail?.Invoke();
-        _OnDone?.Invoke();
-    }
-    public void Execute(bool isValid)
-    {
-        if (isValid)
-        { Complete(); }
-        else
-        { Fail(); }
-    }
 
-    // for UI & debugging
-    public string GetActionDescription()
-    {
-        return actionDescription;
-    }
-
-    // easier to work with inspector with this
-    private void OnValidate()
-    {
-        if(actionDescription != string.Empty)
+        public void Complete()
         {
-            gameObject.name = "Действие - " + actionDescription;
+            if (linkedTasks.Count == 0) { return; }
+            if (!isInteractable) { return; }
+            for (int i = 0; i < linkedTasks.Count; i++) // DANGEROUS ------------------------------------ better to think up something better, possibly breaks when 2 tasks are linked
+            {
+                linkedTasks[i].CompleteStep();
+            }
+            //foreach (SimpleTask task in linkedTasks)
+            //{
+            //    task.Proceed();
+            //}
+            _OnSuccess?.Invoke();
+            _OnDone?.Invoke();
+        }
+
+        public void Fail()
+        {
+            if (linkedTasks.Count == 0) { return; }
+            if (!isInteractable) { return; }
+            for (int i = 0; i < linkedTasks.Count; i++) // DANGEROUS ------------------------------------ better to think up something better
+            {
+                linkedTasks[i].FailStep();
+            }
+            _OnFail?.Invoke();
+            _OnDone?.Invoke();
+        }
+        public void Execute(bool isValid)
+        {
+            if (isValid)
+            { Complete(); }
+            else
+            { Fail(); }
+        }
+
+        // for UI & debugging
+        public string GetActionDescription()
+        {
+            return actionDescription;
+        }
+
+        // easier to work with inspector with this
+        private void OnValidate()
+        {
+            if (actionDescription != string.Empty)
+            {
+                gameObject.name = "Действие - " + actionDescription;
+            }
         }
     }
+
 }

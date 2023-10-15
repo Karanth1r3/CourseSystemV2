@@ -4,41 +4,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-// some lever or button may be inherited from IActionLinker for connection with the system
-// probably will look like that
-public class ActionLinkerExample : MonoBehaviour, IActionLinker
+namespace course
 {
-    [SerializeField] private TaskAction taskAction;
-    [SerializeField] private UnityEvent onConditionsMet, onConditionsFailed;
+    // some lever or button may be inherited from IActionLinker for connection with the system
+    // probably will look like that
+    public class ActionLinkerExample : MonoBehaviour, IActionLinker
+    {
+        [SerializeField] private TaskAction taskAction;
+        [SerializeField] private UnityEvent onConditionsMet, onConditionsFailed;
 
 
-    public void LinkAction()
-    {
-         onConditionsMet.AddListener(ProcessValidSignal);
-         onConditionsFailed.AddListener(ProcessInvalidSignal);
-    }
+        public void LinkAction()
+        {
+            onConditionsMet.AddListener(ProcessValidSignal);
+            onConditionsFailed.AddListener(ProcessInvalidSignal);
+        }
 
-    private void Start()
-    {
-        LinkAction();
-    }
-    public void ProcessValidSignal()
-    {
-        taskAction.Complete();
-    }
+        private void Start()
+        {
+            LinkAction();
+        }
+        public void ProcessValidSignal()
+        {
+            taskAction.Complete();
+        }
 
-    public void PressCorrectButton()
-    {
-        onConditionsMet?.Invoke();
-    }
+        public void PressCorrectButton()
+        {
+            onConditionsMet?.Invoke();
+        }
 
-    public void PressWrongButton()
-    {
-        onConditionsFailed?.Invoke();
-    }
+        public void PressWrongButton()
+        {
+            onConditionsFailed?.Invoke();
+        }
 
-    public void ProcessInvalidSignal()
-    {
-        taskAction.Fail();
+        public void ProcessInvalidSignal()
+        {
+            taskAction.Fail();
+        }
     }
 }
+

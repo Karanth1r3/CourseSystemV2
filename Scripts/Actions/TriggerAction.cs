@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerAction : TaskAction
-{
-    [SerializeField] bool isCorrectTrigger;
-    // Start is called before the first frame update
-    private void OnTriggerEnter(Collider other)
+namespace course
+{//not sure if such class structure is required
+    public class TriggerAction : TaskAction
     {
-        if(other.CompareTag("Player"))
+        [SerializeField] bool isCorrectTrigger;
+        // Start is called before the first frame update
+        private void OnTriggerEnter(Collider other)
         {
-            if(isCorrectTrigger)
+            if (other.CompareTag("Player"))
             {
-                Complete();
-            }
-            else
-            {
-                Fail();
+                if (isCorrectTrigger)
+                {
+                    Complete();
+                }
+                else
+                {
+                    Fail();
+                }
             }
         }
     }
 }
+
+
