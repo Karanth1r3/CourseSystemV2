@@ -1,5 +1,6 @@
 namespace course
 {
+    // probably will be deleted (or not)
     public interface ITriggerZone
     {
         public delegate void ITriggerZone();

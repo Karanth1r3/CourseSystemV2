@@ -1,9 +1,9 @@
 
 namespace course
 {
+    // todo - probably will be needed for going back to previous steps in course/quest
     public interface IEnvironmentChanger
     {
-        // Start is called before the first frame update
         public void DoCommand<T>();
 
         public void Undo();
