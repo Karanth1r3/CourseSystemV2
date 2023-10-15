@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+// some lever or button may be inherited from IActionLinker for connection with the system
+// probably will look like that
 public class ActionLinkerExample : MonoBehaviour, IActionLinker
 {
     [SerializeField] private TaskAction taskAction;
@@ -23,6 +25,16 @@ public class ActionLinkerExample : MonoBehaviour, IActionLinker
     public void ProcessValidSignal()
     {
         taskAction.Complete();
+    }
+
+    public void PressCorrectButton()
+    {
+        onConditionsMet?.Invoke();
+    }
+
+    public void PressWrongButton()
+    {
+        onConditionsFailed?.Invoke();
     }
 
     public void ProcessInvalidSignal()
